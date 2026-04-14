@@ -1,0 +1,8 @@
+{
+  "obs_dim": 12,
+  "act_dim": 3,
+  "gamma": 0.99,
+  "clip_epsilon": 0.2,
+  "total_updates": 990,
+  "use_cholesky": false
+}

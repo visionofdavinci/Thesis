@@ -1,0 +1,35 @@
+#!/bin/bash
+#SBATCH --job-name=ppo_final
+#SBATCH --output=logs/ppo_final_%j.out
+#SBATCH --error=logs/ppo_final_%j.err
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --time=12:00:00
+#SBATCH --partition=rome
+#SBATCH --account=vusr121077
+
+# prevent NumPy from spawning excess threads 
+export OMP_NUM_THREADS=4
+export OPENBLAS_NUM_THREADS=4
+export MKL_NUM_THREADS=4
+export NUMEXPR_NUM_THREADS=4
+
+# load environment
+module load 2023
+module load Python/3.11.3-GCCcore-12.3.0
+source "$HOME/thesis/venv/bin/activate"   
+
+# paths
+PROJECT_DIR="$HOME/thesis"                 
+cd "$PROJECT_DIR"
+mkdir -p logs
+
+# run final training 
+python tuning/train_final.py \
+    --hparams   tuning/best_hparams.json \
+    --episodes  50000 \
+    --save-dir  ppo_escape_final \
+    --seed      42
+
+echo "Final training finished."

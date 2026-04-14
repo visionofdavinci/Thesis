@@ -1,0 +1,18 @@
+{
+  "gamma": 0.99,
+  "clip_epsilon": 0.2,
+  "value_coeff": 0.5,
+  "max_grad_norm": 0.5,
+  "pbrs_clip": 5.0,
+  "lr_actor": 0.0004789618199206086,
+  "lr_critic": 0.0008583412948296377,
+  "entropy_coeff": 0.006622276176710149,
+  "gae_lambda": 0.9069560609471256,
+  "n_epochs": 9,
+  "batch_size": 32,
+  "steps_per_update": 4096,
+  "hidden_size": 128,
+  "progress_weight": 1.6758768710094636,
+  "potential_scale": 3.2059840727665834,
+  "init_log_std": -0.8607993521625992
+}
