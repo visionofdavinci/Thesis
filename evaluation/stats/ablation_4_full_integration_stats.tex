@@ -1,0 +1,54 @@
+\begin{tabular}{llllrrrl}
+\toprule
+Scenario & Comparison & Metric & Test & $p_\mathrm{adj}$ & Effect & $\overline{x}_\mathrm{ref}$ & $\overline{x}_\mathrm{comp}$ \\
+\midrule
+  S4a_3d_traversal_with_late_threat & NO_PPO & collision & McNemar & 0.013$^{*}$ & 0.316 & 0.623 & 0.636 \\
+  S4a_3d_traversal_with_late_threat & NO_SUB & collision & McNemar & 0.000$^{*}$ & 6230000000000.000 & 0.623 & 0.000 \\
+  S4a_3d_traversal_with_late_threat & NO_SUPER & collision & McNemar & 0.000$^{*}$ & 0.008 & 0.623 & 0.751 \\
+  S4a_3d_traversal_with_late_threat & PPO_ONLY & collision & McNemar & 0.000$^{*}$ & 2.936 & 0.623 & 0.288 \\
+  S4a_3d_traversal_with_late_threat & SUB_ONLY & collision & McNemar & 0.000$^{*}$ & 0.000 & 0.623 & 0.800 \\
+  S4a_3d_traversal_with_late_threat & SUPER_ONLY & collision & McNemar & 0.000$^{*}$ & 6230000000000.000 & 0.623 & 0.000 \\
+  S4a_3d_traversal_with_late_threat & NO_PPO & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 0.687 & 9.172 & 8.379 \\
+  S4a_3d_traversal_with_late_threat & NO_SUB & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 0.980 & 9.172 & 16.655 \\
+  S4a_3d_traversal_with_late_threat & NO_SUPER & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 0.997 & 9.172 & 8.246 \\
+  S4a_3d_traversal_with_late_threat & PPO_ONLY & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 0.618 & 9.172 & 7.081 \\
+  S4a_3d_traversal_with_late_threat & SUB_ONLY & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 1.000 & 9.172 & 6.345 \\
+  S4a_3d_traversal_with_late_threat & SUPER_ONLY & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 0.981 & 9.172 & 16.998 \\
+  S4a_3d_traversal_with_late_threat & NO_PPO & spl & Wilcoxon & 0.000$^{*}$ & 0.610 & 0.225 & 0.237 \\
+  S4a_3d_traversal_with_late_threat & NO_SUB & spl & Wilcoxon & 0.000$^{*}$ & 0.868 & 0.225 & 0.510 \\
+  S4a_3d_traversal_with_late_threat & NO_SUPER & spl & Wilcoxon & 0.000$^{*}$ & 0.680 & 0.225 & 0.173 \\
+  S4a_3d_traversal_with_late_threat & PPO_ONLY & spl & Wilcoxon & 0.000$^{*}$ & 0.890 & 0.225 & 0.684 \\
+  S4a_3d_traversal_with_late_threat & SUB_ONLY & spl & Wilcoxon & 0.000$^{*}$ & 0.677 & 0.225 & 0.157 \\
+  S4a_3d_traversal_with_late_threat & SUPER_ONLY & spl & Wilcoxon & 0.000$^{*}$ & 0.877 & 0.225 & 0.490 \\
+  S4a_3d_traversal_with_late_threat & NO_PPO & success & McNemar & 0.027$^{*}$ & 0.515 & 0.348 & 0.364 \\
+  S4a_3d_traversal_with_late_threat & NO_SUB & success & McNemar & 0.000$^{*}$ & 0.016 & 0.348 & 0.983 \\
+  S4a_3d_traversal_with_late_threat & NO_SUPER & success & McNemar & 0.000$^{*}$ & 10.818 & 0.348 & 0.240 \\
+  S4a_3d_traversal_with_late_threat & PPO_ONLY & success & McNemar & 0.000$^{*}$ & 0.293 & 0.348 & 0.715 \\
+  S4a_3d_traversal_with_late_threat & SUB_ONLY & success & McNemar & 0.000$^{*}$ & 11.571 & 0.348 & 0.200 \\
+  S4a_3d_traversal_with_late_threat & SUPER_ONLY & success & McNemar & 0.000$^{*}$ & 0.000 & 0.348 & 1.000 \\
+  S4b_corridor_movers_pocket & NO_PPO & collision & McNemar & 0.000$^{*}$ & 2.327 & 0.782 & 0.644 \\
+  S4b_corridor_movers_pocket & NO_SUB & collision & McNemar & 0.000$^{*}$ & 7820000000000.000 & 0.782 & 0.000 \\
+  S4b_corridor_movers_pocket & NO_SUPER & collision & McNemar & 0.013$^{*}$ & 0.707 & 0.782 & 0.818 \\
+  S4b_corridor_movers_pocket & PPO_ONLY & collision & McNemar & 0.000$^{*}$ & 35.476 & 0.782 & 0.058 \\
+  S4b_corridor_movers_pocket & SUB_ONLY & collision & McNemar & 0.000$^{*}$ & 0.357 & 0.782 & 0.890 \\
+  S4b_corridor_movers_pocket & SUPER_ONLY & collision & McNemar & 0.000$^{*}$ & 7820000000000.000 & 0.782 & 0.000 \\
+  S4b_corridor_movers_pocket & NO_PPO & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 0.727 & 15.845 & 16.662 \\
+  S4b_corridor_movers_pocket & NO_SUB & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 0.911 & 15.845 & 17.773 \\
+  S4b_corridor_movers_pocket & NO_SUPER & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 0.731 & 15.845 & 14.359 \\
+  S4b_corridor_movers_pocket & PPO_ONLY & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 1.000 & 15.845 & 5.709 \\
+  S4b_corridor_movers_pocket & SUB_ONLY & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 1.000 & 15.845 & 7.913 \\
+  S4b_corridor_movers_pocket & SUPER_ONLY & log_dimensionless_jerk & Wilcoxon & 0.000$^{*}$ & 0.962 & 15.845 & 18.428 \\
+  S4b_corridor_movers_pocket & NO_PPO & spl & Wilcoxon & 0.003$^{*}$ & 0.634 & 0.031 & 0.044 \\
+  S4b_corridor_movers_pocket & NO_SUB & spl & Wilcoxon & 0.000$^{*}$ & 0.997 & 0.031 & 0.316 \\
+  S4b_corridor_movers_pocket & NO_SUPER & spl & Wilcoxon & 0.117 & 0.584 & 0.031 & 0.023 \\
+  S4b_corridor_movers_pocket & PPO_ONLY & spl & Wilcoxon & 0.000$^{*}$ & 1.000 & 0.031 & 0.942 \\
+  S4b_corridor_movers_pocket & SUB_ONLY & spl & Wilcoxon & 0.000$^{*}$ & 0.803 & 0.031 & 0.008 \\
+  S4b_corridor_movers_pocket & SUPER_ONLY & spl & Wilcoxon & 0.000$^{*}$ & 0.962 & 0.031 & 0.238 \\
+  S4b_corridor_movers_pocket & NO_PPO & success & McNemar & 0.148 & 0.793 & 0.075 & 0.092 \\
+  S4b_corridor_movers_pocket & NO_SUB & success & McNemar & 0.000$^{*}$ & 0.000 & 0.075 & 0.881 \\
+  S4b_corridor_movers_pocket & NO_SUPER & success & McNemar & 0.006$^{*}$ & 1.867 & 0.075 & 0.049 \\
+  S4b_corridor_movers_pocket & PPO_ONLY & success & McNemar & 0.000$^{*}$ & 0.005 & 0.075 & 0.942 \\
+  S4b_corridor_movers_pocket & SUB_ONLY & success & McNemar & 0.000$^{*}$ & 9.000 & 0.075 & 0.011 \\
+  S4b_corridor_movers_pocket & SUPER_ONLY & success & McNemar & 0.000$^{*}$ & 0.033 & 0.075 & 0.640 \\
+\bottomrule
+\end{tabular}

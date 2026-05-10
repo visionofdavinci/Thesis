@@ -177,17 +177,13 @@ class GaussianPolicy:
     - hidden_sizes : list of int - hidden layer sizes for the actor MLP
     - init_log_std : float - initial log standard deviation.
       -0.5 gives sigma ~ 0.6 (moderate exploration)
-    - use_cholesky : bool - if True, use full Cholesky covariance (for 3D
-      correlated exploration).  Adds act_dim*(act_dim-1)/2 = 3 extra params.
+    - use_cholesky : bool - if True, use full Cholesky covariance (for 3D correlated exploration).  Adds act_dim*(act_dim-1)/2 = 3 extra params.
     """
 
     LOG_STD_MIN = -3.0   # sigma >= 0.05  (prevents collapse)
     LOG_STD_MAX = 0.5     # sigma <= 1.65  (prevents explosion)
 
-    def __init__(self, obs_dim: int, act_dim: int,
-                 hidden_sizes: list = [64, 64],
-                 init_log_std: float = -0.5,
-                 use_cholesky: bool = False):
+    def __init__(self, obs_dim: int, act_dim: int, hidden_sizes: list = [64, 64], init_log_std: float = -0.5, use_cholesky: bool = False):
         self.obs_dim = obs_dim
         self.act_dim = act_dim
         self.use_cholesky = use_cholesky
@@ -265,27 +261,21 @@ class GaussianPolicy:
             diff = u - mean
             # Sigma^{-1} = L^{-T} L^{-1}, so solve for z = L^{-1}(u-mu)
             z = np.linalg.solve(L, diff)
-            log_prob_gauss = -0.5 * np.sum(z ** 2) - np.sum(np.log(np.abs(np.diag(L)))) \
-                             - 0.5 * self.act_dim * np.log(2 * np.pi)
+            log_prob_gauss = -0.5 * np.sum(z ** 2) - np.sum(np.log(np.abs(np.diag(L)))) - 0.5 * self.act_dim * np.log(2 * np.pi)
         else:
             noise = np.random.randn(self.act_dim)
             u = mean + std * noise
             # diagonal Gaussian log prob
-            log_prob_gauss = -0.5 * np.sum(
-                ((u - mean) / std) ** 2 + 2 * np.log(std) + np.log(2 * np.pi)
-            )
+            log_prob_gauss = -0.5 * np.sum(((u - mean) / std) ** 2 + 2 * np.log(std) + np.log(2 * np.pi))
 
         action = np.tanh(u)
         # log |det d(tanh)/du| = sum(log(1 - tanh(u)^2))
         # numerically stable: log(1 - tanh(u)^2) = 2*(log(2) - u - softplus(-2u))
-        log_prob = log_prob_gauss - np.sum(
-            np.log(np.maximum(1.0 - action ** 2, 1e-6))
-        )
+        log_prob = log_prob_gauss - np.sum(np.log(np.maximum(1.0 - action ** 2, 1e-6)))
 
         return action, log_prob, u
 
-    def log_prob(self, obs: np.ndarray, action: np.ndarray,
-                 pre_tanh: np.ndarray = None) -> float:
+    def log_prob(self, obs: np.ndarray, action: np.ndarray, pre_tanh: np.ndarray = None) -> float:
         """
         Computes corrected log probability of a given action.
 
@@ -310,18 +300,13 @@ class GaussianPolicy:
             L = self._get_cholesky_L()
             diff = u - mean
             z = np.linalg.solve(L, diff)
-            log_prob_gauss = -0.5 * np.sum(z ** 2) - np.sum(np.log(np.abs(np.diag(L)))) \
-                             - 0.5 * self.act_dim * np.log(2 * np.pi)
+            log_prob_gauss = -0.5 * np.sum(z ** 2) - np.sum(np.log(np.abs(np.diag(L)))) - 0.5 * self.act_dim * np.log(2 * np.pi)
         else:
-            log_prob_gauss = -0.5 * np.sum(
-                ((u - mean) / std) ** 2 + 2 * np.log(std) + np.log(2 * np.pi)
-            )
+            log_prob_gauss = -0.5 * np.sum(((u - mean) / std) ** 2 + 2 * np.log(std) + np.log(2 * np.pi))
 
         # Jacobian correction
         tanh_u = np.tanh(u)
-        log_prob = log_prob_gauss - np.sum(
-            np.log(np.maximum(1.0 - tanh_u ** 2, 1e-6))
-        )
+        log_prob = log_prob_gauss - np.sum(np.log(np.maximum(1.0 - tanh_u ** 2, 1e-6)))
         return log_prob
 
     def entropy(self) -> float:
@@ -333,8 +318,7 @@ class GaussianPolicy:
         std = np.exp(np.clip(self.log_std, self.LOG_STD_MIN, self.LOG_STD_MAX))
         if self.use_cholesky:
             L = self._get_cholesky_L()
-            return 0.5 * self.act_dim * (1 + np.log(2 * np.pi)) + \
-                   np.sum(np.log(np.abs(np.diag(L))))
+            return 0.5 * self.act_dim * (1 + np.log(2 * np.pi)) + np.sum(np.log(np.abs(np.diag(L))))
         else:
             return 0.5 * self.act_dim * (1 + np.log(2 * np.pi)) + np.sum(np.log(std))
 
@@ -386,9 +370,7 @@ class RolloutBuffer:
         """
         Computes GAE advantages and discounted returns.
         """
-        self.advantages, self.returns = agent.compute_gae(
-            self.rewards, self.values, self.dones, last_value
-        )
+        self.advantages, self.returns = agent.compute_gae(self.rewards, self.values, self.dones, last_value)
 
     def get(self) -> dict:
         """Returns all stored data as a dictionary."""
@@ -428,14 +410,9 @@ class PPOAgent:
     - use_cholesky : bool - use Cholesky covariance for correlated exploration
     """
 
-    def __init__(self, obs_dim: int, act_dim: int = 3,
-                 lr_actor: float = 3e-4, lr_critic: float = 1e-3,
-                 gamma: float = 0.99, gae_lambda: float = 0.95,
-                 clip_epsilon: float = 0.2, entropy_coeff: float = 0.01,
-                 value_coeff: float = 0.5, max_grad_norm: float = 0.5,
-                 n_epochs: int = 10, batch_size: int = 64,
-                 hidden_sizes: list = None,
-                 use_cholesky: bool = False):
+    def __init__(self, obs_dim: int, act_dim: int = 3, lr_actor: float = 3e-4, lr_critic: float = 1e-3, gamma: float = 0.99, gae_lambda: float = 0.95,
+                 clip_epsilon: float = 0.2, entropy_coeff: float = 0.01, value_coeff: float = 0.5, max_grad_norm: float = 0.5, n_epochs: int = 10, batch_size: int = 64,
+                 hidden_sizes: list = None, use_cholesky: bool = False):
         if hidden_sizes is None:
             hidden_sizes = [64, 64]
 
@@ -453,8 +430,7 @@ class PPOAgent:
         self.batch_size = batch_size
 
         # policy network (actor + log_std, optionally Cholesky)
-        self.policy = GaussianPolicy(obs_dim, act_dim, hidden_sizes,
-                                     use_cholesky=use_cholesky)
+        self.policy = GaussianPolicy(obs_dim, act_dim, hidden_sizes, use_cholesky=use_cholesky)
 
         # value function (critic)
         self.critic = NumpyMLP(
@@ -490,8 +466,7 @@ class PPOAgent:
 
         return action, log_prob, value, pre_tanh
 
-    def evaluate(self, obs: np.ndarray, action: np.ndarray,
-                 pre_tanh: np.ndarray = None) -> Tuple[float, float, float]:
+    def evaluate(self, obs: np.ndarray, action: np.ndarray, pre_tanh: np.ndarray = None) -> Tuple[float, float, float]:
         """
         Evaluates a stored (obs, action) pair.
 
@@ -603,8 +578,7 @@ class PPOAgent:
 
                     # PPO clipped objective
                     ratio = np.exp(np.clip(new_lp_i - old_lp_i, -20, 20))
-                    clipped_ratio = np.clip(ratio, 1 - self.clip_epsilon,
-                                            1 + self.clip_epsilon)
+                    clipped_ratio = np.clip(ratio, 1 - self.clip_epsilon, 1 + self.clip_epsilon)
                     pg_loss1 = -adv_i * ratio
                     pg_loss2 = -adv_i * clipped_ratio
                     pg_loss = max(pg_loss1, pg_loss2)
@@ -745,8 +719,7 @@ class PPOAgent:
         self.critic.save(os.path.join(directory, 'critic.npz'))
         np.save(os.path.join(directory, 'log_std.npy'), self.policy.log_std)
         if self.policy.use_cholesky and self.policy.chol_offdiag is not None:
-            np.save(os.path.join(directory, 'chol_offdiag.npy'),
-                    self.policy.chol_offdiag)
+            np.save(os.path.join(directory, 'chol_offdiag.npy'), self.policy.chol_offdiag)
 
         with open(os.path.join(directory, 'config.json'), 'w') as f:
             json.dump({

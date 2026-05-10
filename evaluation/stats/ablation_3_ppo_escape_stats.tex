@@ -1,0 +1,70 @@
+\begin{tabular}{llllrrrl}
+\toprule
+Scenario & Comparison & Metric & Test & $p_\mathrm{adj}$ & Effect & $\overline{x}_\mathrm{ref}$ & $\overline{x}_\mathrm{comp}$ \\
+\midrule
+  S3a_centerline_blocker_3d & NO_PPO & collision & McNemar & 1.000 & --- & 0.148 & 0.148 \\
+  S3a_centerline_blocker_3d & NO_SUB & collision & McNemar & 0.000$^{*}$ & 1480000000000.000 & 0.148 & 0.000 \\
+  S3a_centerline_blocker_3d & NO_SUPER & collision & McNemar & 1.000 & --- & 0.148 & 0.148 \\
+  S3a_centerline_blocker_3d & PPO_ONLY & collision & McNemar & 0.000$^{*}$ & 0.131 & 0.148 & 0.756 \\
+  S3a_centerline_blocker_3d & SUB_ONLY & collision & McNemar & 1.000 & --- & 0.148 & 0.148 \\
+  S3a_centerline_blocker_3d & SUPER_ONLY & collision & McNemar & 0.000$^{*}$ & 1480000000000.000 & 0.148 & 0.000 \\
+  S3a_centerline_blocker_3d & NO_PPO & detour_pct & Wilcoxon & 0.018$^{*}$ & 1.000 & 6.304 & 6.302 \\
+  S3a_centerline_blocker_3d & NO_SUB & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 6.304 & 64.290 \\
+  S3a_centerline_blocker_3d & NO_SUPER & detour_pct & Wilcoxon & --- & --- & 6.304 & 6.304 \\
+  S3a_centerline_blocker_3d & PPO_ONLY & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 5.542 & -4.069 \\
+  S3a_centerline_blocker_3d & SUB_ONLY & detour_pct & Wilcoxon & 0.018$^{*}$ & 1.000 & 6.304 & 6.302 \\
+  S3a_centerline_blocker_3d & SUPER_ONLY & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 6.304 & 65.949 \\
+  S3a_centerline_blocker_3d & NO_PPO & success & McNemar & 1.000 & --- & 0.852 & 0.852 \\
+  S3a_centerline_blocker_3d & NO_SUB & success & McNemar & 0.000$^{*}$ & 0.000 & 0.852 & 1.000 \\
+  S3a_centerline_blocker_3d & NO_SUPER & success & McNemar & 1.000 & --- & 0.852 & 0.852 \\
+  S3a_centerline_blocker_3d & PPO_ONLY & success & McNemar & 0.000$^{*}$ & 7.609 & 0.852 & 0.244 \\
+  S3a_centerline_blocker_3d & SUB_ONLY & success & McNemar & 1.000 & --- & 0.852 & 0.852 \\
+  S3a_centerline_blocker_3d & SUPER_ONLY & success & McNemar & 0.000$^{*}$ & 0.000 & 0.852 & 1.000 \\
+  S3b_3d_pocket_trap & NO_PPO & collision & McNemar & 0.244 & 30000000000.000 & 0.916 & 0.913 \\
+  S3b_3d_pocket_trap & NO_SUB & collision & McNemar & 0.000$^{*}$ & 9160000000000.000 & 0.916 & 0.000 \\
+  S3b_3d_pocket_trap & NO_SUPER & collision & McNemar & 1.000 & --- & 0.916 & 0.916 \\
+  S3b_3d_pocket_trap & PPO_ONLY & collision & McNemar & 0.000$^{*}$ & 4.894 & 0.916 & 0.659 \\
+  S3b_3d_pocket_trap & SUB_ONLY & collision & McNemar & 0.244 & 30000000000.000 & 0.916 & 0.913 \\
+  S3b_3d_pocket_trap & SUPER_ONLY & collision & McNemar & 0.000$^{*}$ & 9160000000000.000 & 0.916 & 0.000 \\
+  S3b_3d_pocket_trap & NO_PPO & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 25.731 & 23.667 \\
+  S3b_3d_pocket_trap & NO_SUB & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 25.677 & 155.186 \\
+  S3b_3d_pocket_trap & NO_SUPER & detour_pct & Wilcoxon & --- & --- & 25.731 & 25.731 \\
+  S3b_3d_pocket_trap & PPO_ONLY & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 24.264 & -4.009 \\
+  S3b_3d_pocket_trap & SUB_ONLY & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 25.731 & 23.667 \\
+  S3b_3d_pocket_trap & SUPER_ONLY & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 24.658 & 194.216 \\
+  S3b_3d_pocket_trap & NO_PPO & recovery_rate & Wilcoxon & --- & --- & 1.000 & 1.000 \\
+  S3b_3d_pocket_trap & NO_SUB & recovery_rate & Wilcoxon & 0.005$^{*}$ & 1.000 & 1.000 & 0.949 \\
+  S3b_3d_pocket_trap & NO_SUPER & recovery_rate & Wilcoxon & --- & --- & 1.000 & 1.000 \\
+  S3b_3d_pocket_trap & SUB_ONLY & recovery_rate & Wilcoxon & --- & --- & 1.000 & 1.000 \\
+  S3b_3d_pocket_trap & SUPER_ONLY & recovery_rate & Wilcoxon & 0.000$^{*}$ & 1.000 & 1.000 & 0.551 \\
+  S3b_3d_pocket_trap & NO_PPO & success & McNemar & 0.244 & 0.000 & 0.084 & 0.087 \\
+  S3b_3d_pocket_trap & NO_SUB & success & McNemar & 0.000$^{*}$ & 0.002 & 0.084 & 0.970 \\
+  S3b_3d_pocket_trap & NO_SUPER & success & McNemar & 1.000 & --- & 0.084 & 0.084 \\
+  S3b_3d_pocket_trap & PPO_ONLY & success & McNemar & 0.000$^{*}$ & 0.204 & 0.084 & 0.341 \\
+  S3b_3d_pocket_trap & SUB_ONLY & success & McNemar & 0.244 & 0.000 & 0.084 & 0.087 \\
+  S3b_3d_pocket_trap & SUPER_ONLY & success & McNemar & 0.000$^{*}$ & 0.059 & 0.084 & 0.581 \\
+  S3c_3d_double_cluster_saddle & NO_PPO & collision & McNemar & 0.000$^{*}$ & 19.000 & 0.643 & 0.625 \\
+  S3c_3d_double_cluster_saddle & NO_SUB & collision & McNemar & 0.000$^{*}$ & 6430000000000.000 & 0.643 & 0.000 \\
+  S3c_3d_double_cluster_saddle & NO_SUPER & collision & McNemar & 1.000 & --- & 0.643 & 0.643 \\
+  S3c_3d_double_cluster_saddle & PPO_ONLY & collision & McNemar & 0.005$^{*}$ & 0.731 & 0.643 & 0.695 \\
+  S3c_3d_double_cluster_saddle & SUB_ONLY & collision & McNemar & 0.000$^{*}$ & 19.000 & 0.643 & 0.625 \\
+  S3c_3d_double_cluster_saddle & SUPER_ONLY & collision & McNemar & 0.000$^{*}$ & 6430000000000.000 & 0.643 & 0.000 \\
+  S3c_3d_double_cluster_saddle & NO_PPO & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 29.462 & 25.943 \\
+  S3c_3d_double_cluster_saddle & NO_SUB & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 29.116 & 142.406 \\
+  S3c_3d_double_cluster_saddle & NO_SUPER & detour_pct & Wilcoxon & --- & --- & 29.485 & 29.485 \\
+  S3c_3d_double_cluster_saddle & PPO_ONLY & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 28.639 & -4.009 \\
+  S3c_3d_double_cluster_saddle & SUB_ONLY & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 29.462 & 25.943 \\
+  S3c_3d_double_cluster_saddle & SUPER_ONLY & detour_pct & Wilcoxon & 0.000$^{*}$ & 1.000 & 26.867 & 120.608 \\
+  S3c_3d_double_cluster_saddle & NO_PPO & recovery_rate & Wilcoxon & --- & --- & 1.000 & 1.000 \\
+  S3c_3d_double_cluster_saddle & NO_SUB & recovery_rate & Wilcoxon & 0.000$^{*}$ & 1.000 & 1.000 & 0.958 \\
+  S3c_3d_double_cluster_saddle & NO_SUPER & recovery_rate & Wilcoxon & --- & --- & 1.000 & 1.000 \\
+  S3c_3d_double_cluster_saddle & SUB_ONLY & recovery_rate & Wilcoxon & --- & --- & 1.000 & 1.000 \\
+  S3c_3d_double_cluster_saddle & SUPER_ONLY & recovery_rate & Wilcoxon & 0.000$^{*}$ & 1.000 & 1.000 & 0.706 \\
+  S3c_3d_double_cluster_saddle & NO_PPO & success & McNemar & 0.000$^{*}$ & 0.053 & 0.357 & 0.375 \\
+  S3c_3d_double_cluster_saddle & NO_SUB & success & McNemar & 0.000$^{*}$ & 0.054 & 0.357 & 0.914 \\
+  S3c_3d_double_cluster_saddle & NO_SUPER & success & McNemar & 1.000 & --- & 0.357 & 0.357 \\
+  S3c_3d_double_cluster_saddle & PPO_ONLY & success & McNemar & 0.005$^{*}$ & 1.369 & 0.357 & 0.305 \\
+  S3c_3d_double_cluster_saddle & SUB_ONLY & success & McNemar & 0.000$^{*}$ & 0.053 & 0.357 & 0.375 \\
+  S3c_3d_double_cluster_saddle & SUPER_ONLY & success & McNemar & 0.001$^{*}$ & 1.479 & 0.357 & 0.301 \\
+\bottomrule
+\end{tabular}

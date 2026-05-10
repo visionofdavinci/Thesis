@@ -59,8 +59,7 @@ class SubharmonicFieldEngine:
     I am working towards visualization of the potential field, gradients and temporal derivatives to understand how the field evolves over time.
     """
     
-    def __init__(self, x_bounds: tuple[float, float], y_bounds: tuple[float, float], grid_resolution: int = 100, goal_position: np.ndarray = None,
-                 max_iterations: int = 1000, convergence_threshold: float = 1e-4)->None:
+    def __init__(self, x_bounds: tuple[float, float], y_bounds: tuple[float, float], grid_resolution: int = 100, goal_position: np.ndarray = None, max_iterations: int = 1000, convergence_threshold: float = 1e-4)->None:
         """
         Parameters:
         - x_bounds : tuple - (x_min, x_max) bounds of the workspace
@@ -89,9 +88,7 @@ class SubharmonicFieldEngine:
         self.phi_prev = np.zeros_like(self.phi)  #the previous for computing ∂Φ/∂t
         
         #goal position
-        self.goal_position = goal_position if goal_position is not None else \
-                            np.array([(x_bounds[0] + x_bounds[1])/2, 
-                                     (y_bounds[0] + y_bounds[1])/2])
+        self.goal_position = goal_position if goal_position is not None else np.array([(x_bounds[0] + x_bounds[1])/2, (y_bounds[0] + y_bounds[1])/2])
         
         #obstacles list
         self.obstacles: List[Obstacle] = []
@@ -111,8 +108,7 @@ class SubharmonicFieldEngine:
         self.k_rep = 1.0
         self.danger_distance = 1.0
         
-    def add_obstacle(self, position: np.ndarray, radius: float, 
-                     velocity: np.ndarray = None)->None:
+    def add_obstacle(self, position: np.ndarray, radius: float, velocity: np.ndarray = None)->None:
         """
         Adds an obstacle to the environment
         
@@ -123,17 +119,9 @@ class SubharmonicFieldEngine:
         Returns: none
         """
         if velocity is not None:
-            obstacle = Obstacle(
-            position=np.array(position, dtype=float),
-            radius=radius,
-            velocity=np.array(velocity, dtype=float)
-        )
+            obstacle = Obstacle(position=np.array(position, dtype=float), radius=radius, velocity=np.array(velocity, dtype=float))
         else:
-            obstacle = Obstacle(
-                position=np.array(position, dtype=float),
-                radius=radius,
-                velocity=None
-            )
+            obstacle = Obstacle(position=np.array(position, dtype=float), radius=radius, velocity=None)
         self.obstacles.append(obstacle)
         
     def clear_obstacles(self):
@@ -297,8 +285,7 @@ class SubharmonicFieldEngine:
             print(f"Harmonic field reached max iterations ({self.max_iterations}) without full convergence")
         return self.max_iterations
     
-    def solve_subharmonic_field(self, a_att: float = 0.01, a_rep: float = 1.0,
-                                k_rep: float = 1.0, verbose: bool = False) -> None:
+    def solve_subharmonic_field(self, a_att: float = 0.01, a_rep: float = 1.0, k_rep: float = 1.0, verbose: bool = False) -> None:
         """
         Computes the subharmonic potential field using analytical functions
         from arXiv:2402.11601.
@@ -399,7 +386,7 @@ class SubharmonicFieldEngine:
         #repulsive gradient per obstacle
         #derivative of +a*exp(-k*r^2) w.r.t. x is -2*a*k*dx*exp(-k*r^2)
         #this points toward obstacle center (uphill toward peak)
-        #so -gradient points AWAY from obstacle (repels)
+        #so -gradient points away from obstacle (repels)
         for obs in self.obstacles:
             diff_obs = position - obs.position
             r_obs_sq = np.dot(diff_obs, diff_obs)
@@ -450,8 +437,7 @@ class SubharmonicFieldEngine:
 
         return dphi_dt
 
-    def circular_sample(self, raw_next_point: np.ndarray, current_pos: np.ndarray,
-                        sample_radius: float = 0.5, n_samples: int = 16) -> np.ndarray:
+    def circular_sample(self, raw_next_point: np.ndarray, current_pos: np.ndarray, sample_radius: float = 0.5, n_samples: int = 16) -> np.ndarray:
         """
         Circular sampling technique (Section IV of arXiv:2402.11601).
 
@@ -472,21 +458,16 @@ class SubharmonicFieldEngine:
         angles = np.linspace(0, 2 * np.pi, n_samples, endpoint=False)
 
         #sort angles so we start from the direction closest to goal (paper's priority)
-        goal_dir = np.arctan2(self.goal_position[1] - raw_next_point[1],
-                              self.goal_position[0] - raw_next_point[0])
+        goal_dir = np.arctan2(self.goal_position[1] - raw_next_point[1], self.goal_position[0] - raw_next_point[0])
         angles = (angles + goal_dir) % (2 * np.pi)
         angles = np.sort(angles)
 
         candidates = []
         for angle in angles:
-            candidate = np.array([
-                raw_next_point[0] + sample_radius * np.cos(angle),
-                raw_next_point[1] + sample_radius * np.sin(angle)
-            ])
+            candidate = np.array([raw_next_point[0] + sample_radius * np.cos(angle), raw_next_point[1] + sample_radius * np.sin(angle)])
 
             #check workspace bounds
-            if (candidate[0] < self.x_bounds[0] or candidate[0] > self.x_bounds[1] or
-                candidate[1] < self.y_bounds[0] or candidate[1] > self.y_bounds[1]):
+            if (candidate[0] < self.x_bounds[0] or candidate[0] > self.x_bounds[1] or candidate[1] < self.y_bounds[0] or candidate[1] > self.y_bounds[1]):
                 continue
 
             #filter out points within danger distance of any obstacle (Eq. 19, 20)
@@ -576,10 +557,8 @@ class SubharmonicFieldEngine:
                     grad_y[di, dj] = 0.0
         
         #bilinear interpolation of gradients
-        gx = (1-wx)*(1-wy)*grad_x[0,0] + wx*(1-wy)*grad_x[1,0] + \
-             (1-wx)*wy*grad_x[0,1] + wx*wy*grad_x[1,1]
-        gy = (1-wx)*(1-wy)*grad_y[0,0] + wx*(1-wy)*grad_y[1,0] + \
-             (1-wx)*wy*grad_y[0,1] + wx*wy*grad_y[1,1]
+        gx = (1-wx)*(1-wy)*grad_x[0,0] + wx*(1-wy)*grad_x[1,0] + (1-wx)*wy*grad_x[0,1] + wx*wy*grad_x[1,1]
+        gy = (1-wx)*(1-wy)*grad_y[0,0] + wx*(1-wy)*grad_y[1,0] + (1-wx)*wy*grad_y[0,1] + wx*wy*grad_y[1,1]
         
         return np.array([gx, gy])
     
@@ -611,10 +590,7 @@ class SubharmonicFieldEngine:
         wx = i_float - i
         wy = j_float - j
         
-        phi_interp = (1-wx)*(1-wy)*self.phi[i, j] + \
-                     wx*(1-wy)*self.phi[i+1, j] + \
-                     (1-wx)*wy*self.phi[i, j+1] + \
-                     wx*wy*self.phi[i+1, j+1]
+        phi_interp = (1-wx)*(1-wy)*self.phi[i, j] + wx*(1-wy)*self.phi[i+1, j] + (1-wx)*wy*self.phi[i, j+1] + wx*wy*self.phi[i+1, j+1]
         
         return phi_interp
     
@@ -636,9 +612,7 @@ class SubharmonicFieldEngine:
         """
         Gets ∂Φ/∂t at a specific position.
         In analytical (subharmonic) mode, delegates to compute_dphi_dt which uses
-        the exact chain-rule formula. In grid mode, interpolates the finite-difference
-        grid - only meaningful if update_field_analytical(recompute_grid=True) or
-        update_field() was called so that phi != phi_prev.
+        the exact chain-rule formula.
 
         Parameters:
         - position : np.ndarray - [x, y] position in world coordinates
@@ -664,15 +638,11 @@ class SubharmonicFieldEngine:
         wx = i_float - i
         wy = j_float - j
         
-        dphi_dt = (1-wx)*(1-wy)*dphi_dt_grid[i, j] + \
-                  wx*(1-wy)*dphi_dt_grid[i+1, j] + \
-                  (1-wx)*wy*dphi_dt_grid[i, j+1] + \
-                  wx*wy*dphi_dt_grid[i+1, j+1]
+        dphi_dt = (1-wx)*(1-wy)*dphi_dt_grid[i, j] + wx*(1-wy)*dphi_dt_grid[i+1, j] + (1-wx)*wy*dphi_dt_grid[i, j+1] + wx*wy*dphi_dt_grid[i+1, j+1]
         
         return dphi_dt
     
-    def update_field_analytical(self, dt: float, a_att: float = 0.01, a_rep: float = 1.0, k_rep: float = 1.0,
-                                recompute_grid: bool = False, verbose: bool = False) -> None:
+    def update_field_analytical(self, dt: float, a_att: float = 0.01, a_rep: float = 1.0, k_rep: float = 1.0, recompute_grid: bool = False, verbose: bool = False) -> None:
         """
         Field update for dynamic obstacles using only the analytical subharmonic field. 
 
@@ -711,8 +681,7 @@ class SubharmonicFieldEngine:
                     grid_pos = self._grid_to_world(i, j)
                     self.phi[i, j] = self._analytical_potential(grid_pos)
 
-    def update_field(self, dt: float, subharmonic: bool = True, a_att: float = 0.01, a_rep: float = 1.0, k_rep: float = 1.0,
-                    verbose: bool = False)->None:
+    def update_field(self, dt: float, subharmonic: bool = True, a_att: float = 0.01, a_rep: float = 1.0, k_rep: float = 1.0, verbose: bool = False)->None:
         """
         Updates the potential field for the current obstacle configuration.
         Includes full harmonic solve + optional subharmonic overlay.
@@ -738,12 +707,7 @@ class SubharmonicFieldEngine:
         
         #add subharmonic field if needed
         if subharmonic:
-            self.solve_subharmonic_field(
-                a_att=a_att,
-                a_rep=a_rep,
-                k_rep=k_rep,
-                verbose=verbose
-            )
+            self.solve_subharmonic_field(a_att=a_att, a_rep=a_rep, k_rep=k_rep, verbose=verbose)
     
     def visualize(self, show_gradient: bool = True, gradient_skip: int = 5, agent_position: Optional[np.ndarray] = None,show_temporal_derivative: bool = False,
                   save_path: Optional[str] = None)->plt.Figure:

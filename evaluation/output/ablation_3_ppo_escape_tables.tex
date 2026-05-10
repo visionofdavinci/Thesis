@@ -1,0 +1,59 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Ablation 3 (PPO escape; RQ4 freeze-state recovery): scenario S3a centerline blocker 3d}
+\label{tab:abl3:S3a_centerline_blocker_3d}
+\begin{tabular}{lrrrrrr}
+\toprule
+Config & $\mathrm{SR}$ $\uparrow$ & $R_{\mathrm{rec}}$ $\uparrow$ & $N_{\mathrm{fr}}$ $\downarrow$ & $\Delta_{\%}$ $\downarrow$ & $\mathrm{CR}$ $\downarrow$ & $t_{\mathrm{goal}}$ $\downarrow$ \\
+\midrule
+\textsc{Full} & 0.852 & 1.000\,(0.000)$_{[n=9]}$ & 0.01 & 6.30\,(1.28)$_{[n=852]}$ & 0.148 & 9.41\,(0.46)$_{[n=852]}$ \\
+\textsc{No-Sub} & 1.000 & 1.000\,(0.000)$_{[n=250]}$ & 0.56 & 69.03\,(24.76) & 0.000 & 12.37\,(1.25) \\
+\textsc{No-Super} & 0.852 & 1.000\,(0.000)$_{[n=9]}$ & 0.01 & 6.30\,(1.28)$_{[n=852]}$ & 0.148 & 9.41\,(0.46)$_{[n=852]}$ \\
+\textsc{No-Ppo} & 0.852 & 1.000\,(0.000)$_{[n=9]}$ & 0.01 & 6.30\,(1.28)$_{[n=852]}$ & 0.148 & 9.41\,(0.46)$_{[n=852]}$ \\
+\textsc{Sub-Only} & 0.852 & 1.000\,(0.000)$_{[n=9]}$ & 0.01 & 6.30\,(1.28)$_{[n=852]}$ & 0.148 & 9.41\,(0.46)$_{[n=852]}$ \\
+\textsc{Super-Only} & 1.000 & 1.000\,(0.000)$_{[n=250]}$ & 0.60 & 71.09\,(28.98) & 0.000 & 12.42\,(1.37) \\
+\textsc{Ppo-Only} & 0.244 & --- & 0.00 & -4.03\,(0.37)$_{[n=244]}$ & 0.756 & 3.97\,(0.10)$_{[n=244]}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\caption{Ablation 3 (PPO escape; RQ4 freeze-state recovery): scenario S3b 3d pocket trap}
+\label{tab:abl3:S3b_3d_pocket_trap}
+\begin{tabular}{lrrrrrr}
+\toprule
+Config & $\mathrm{SR}$ $\uparrow$ & $R_{\mathrm{rec}}$ $\uparrow$ & $N_{\mathrm{fr}}$ $\downarrow$ & $\Delta_{\%}$ $\downarrow$ & $\mathrm{CR}$ $\downarrow$ & $t_{\mathrm{goal}}$ $\downarrow$ \\
+\midrule
+\textsc{Full} & 0.084 & 1.000\,(0.000)$_{[n=140]}$ & 0.26 & 25.73\,(4.40)$_{[n=84]}$ & 0.916 & 14.34\,(1.43)$_{[n=84]}$ \\
+\textsc{No-Sub} & 0.970 & 0.980\,(0.129)$_{[n=961]}$ & 6.03 & 164.47\,(42.35)$_{[n=970]}$ & 0.000 & 17.50\,(2.46)$_{[n=970]}$ \\
+\textsc{No-Super} & 0.084 & 1.000\,(0.000)$_{[n=140]}$ & 0.26 & 25.73\,(4.40)$_{[n=84]}$ & 0.916 & 14.34\,(1.43)$_{[n=84]}$ \\
+\textsc{No-Ppo} & 0.087 & 1.000\,(0.000)$_{[n=140]}$ & 0.14 & 23.71\,(2.30)$_{[n=87]}$ & 0.913 & 14.46\,(1.63)$_{[n=87]}$ \\
+\textsc{Sub-Only} & 0.087 & 1.000\,(0.000)$_{[n=140]}$ & 0.14 & 23.71\,(2.30)$_{[n=87]}$ & 0.913 & 14.46\,(1.63)$_{[n=87]}$ \\
+\textsc{Super-Only} & 0.581 & 0.694\,(0.435)$_{[n=961]}$ & 4.23 & 234.60\,(129.12)$_{[n=581]}$ & 0.000 & 20.16\,(5.92)$_{[n=581]}$ \\
+\textsc{Ppo-Only} & 0.341 & --- & 0.00 & -4.05\,(0.42)$_{[n=341]}$ & 0.659 & 3.91\,(0.10)$_{[n=341]}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\caption{Ablation 3 (PPO escape; RQ4 freeze-state recovery): scenario S3c 3d double cluster saddle}
+\label{tab:abl3:S3c_3d_double_cluster_saddle}
+\begin{tabular}{lrrrrrr}
+\toprule
+Config & $\mathrm{SR}$ $\uparrow$ & $R_{\mathrm{rec}}$ $\uparrow$ & $N_{\mathrm{fr}}$ $\downarrow$ & $\Delta_{\%}$ $\downarrow$ & $\mathrm{CR}$ $\downarrow$ & $t_{\mathrm{goal}}$ $\downarrow$ \\
+\midrule
+\textsc{Full} & 0.357 & 1.000\,(0.000)$_{[n=469]}$ & 1.04 & 29.48\,(6.84)$_{[n=357]}$ & 0.643 & 14.83\,(1.72)$_{[n=357]}$ \\
+\textsc{No-Sub} & 0.914 & 0.968\,(0.145)$_{[n=938]}$ & 7.56 & 166.08\,(47.51)$_{[n=914]}$ & 0.000 & 16.14\,(2.70)$_{[n=914]}$ \\
+\textsc{No-Super} & 0.357 & 1.000\,(0.000)$_{[n=469]}$ & 1.04 & 29.48\,(6.84)$_{[n=357]}$ & 0.643 & 14.83\,(1.72)$_{[n=357]}$ \\
+\textsc{No-Ppo} & 0.375 & 1.000\,(0.000)$_{[n=469]}$ & 0.54 & 26.05\,(2.77)$_{[n=375]}$ & 0.625 & 15.01\,(1.96)$_{[n=375]}$ \\
+\textsc{Sub-Only} & 0.375 & 1.000\,(0.000)$_{[n=469]}$ & 0.54 & 26.05\,(2.77)$_{[n=375]}$ & 0.625 & 15.01\,(1.96)$_{[n=375]}$ \\
+\textsc{Super-Only} & 0.301 & 0.696\,(0.384)$_{[n=938]}$ & 6.60 & 187.42\,(154.91)$_{[n=301]}$ & 0.000 & 16.34\,(6.83)$_{[n=301]}$ \\
+\textsc{Ppo-Only} & 0.305 & --- & 0.00 & -3.98\,(0.57)$_{[n=305]}$ & 0.695 & 3.61\,(0.10)$_{[n=305]}$ \\
+\bottomrule
+\end{tabular}
+\end{table}

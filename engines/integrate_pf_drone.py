@@ -49,9 +49,7 @@ class PotentialFieldNavigator:
     - ppo_checkpoint : str - path to PPO checkpoint directory
     """
 
-    def __init__(self, start_pos: np.ndarray, goal_pos: np.ndarray,
-                 workspace_bounds: tuple = ((0, 10), (0, 10)),
-                 target_altitude: float = 1.0, gui: bool = True,
+    def __init__(self, start_pos: np.ndarray, goal_pos: np.ndarray, workspace_bounds: tuple = ((0, 10), (0, 10)), target_altitude: float = 1.0, gui: bool = True,
                  record_video: bool = False, ppo_checkpoint: str = ''):
 
         self.start_pos = np.array(start_pos)
@@ -79,13 +77,7 @@ class PotentialFieldNavigator:
         self.ctrl = DSLPIDControl(drone_model=DroneModel.CF2X)
 
         #3D analytical field engine (matches PPO training config)
-        self.field_engine = SuperharmonicFieldEngine(
-            goal_position=goal_pos,
-            a_att=0.1,
-            a_rep=1.0,
-            n_power=2.0,
-            danger_distance=1.0,
-        )
+        self.field_engine = SuperharmonicFieldEngine(goal_position=goal_pos, a_att=0.1, a_rep=1.0, n_power=2.0, danger_distance=1.0)
 
         #control parameters
         self.velocity_gain = 2.0
@@ -106,17 +98,17 @@ class PotentialFieldNavigator:
         self.ppo_escape_speed = 1.2
         self.initial_d_goal = np.linalg.norm(start_pos - goal_pos)
 
-        #load PPO agent (obs_dim = 12, field-only observations)
-        obs_dim = 12
+        #load escape agent - PPO only, unified via select_action_deterministic().
+        #obs_dim=13 matches EscapeEnvironment.obs_dim in train_dqn_escape.py.
+        obs_dim = 13
         self.ppo_agent = PPOAgent(obs_dim=obs_dim, act_dim=3, hidden_sizes=[64, 64])
         if ppo_checkpoint:
-            import os
-            if os.path.exists(ppo_checkpoint):
+            import os as _os
+            if _os.path.exists(ppo_checkpoint):
                 self.ppo_agent.load(ppo_checkpoint)
                 print(f"  Loaded PPO checkpoint from {ppo_checkpoint}")
             else:
-                print(f"  Warning: PPO checkpoint {ppo_checkpoint} not found, "
-                      f"using random policy")
+                print(f"  Warning: PPO checkpoint {ppo_checkpoint} not found, using random policy")
 
         #trajectory tracking
         self.trajectory = []
@@ -136,8 +128,7 @@ class PotentialFieldNavigator:
         self.debug = True
         self.debug_counter = 0
 
-    def add_obstacle(self, position: np.ndarray, radius: float,
-                     velocity: np.ndarray = None):
+    def add_obstacle(self, position: np.ndarray, radius: float, velocity: np.ndarray = None):
         """
         Adds a 3D obstacle to the field engine.
 
@@ -147,18 +138,14 @@ class PotentialFieldNavigator:
         - velocity : np.ndarray, optional - [vx, vy, vz] velocity
         Returns: none
         """
-        self.field_engine.add_obstacle(
-            position=position,
-            radius=radius,
-            velocity=velocity
-        )
+        self.field_engine.add_obstacle(position=position, radius=radius, velocity=velocity)
 
     def compute_target_position(self, current_pos: np.ndarray) -> np.ndarray:
         """
         Computes next target position using 3D gradient + residual PPO
         gated by threat level.
 
-        The pipeline:
+        How it does it:
         1. Compute the negative gradient as the base velocity direction
         2. Scale by velocity_gain, cap at max_velocity
         3. Modulate speed by dPhi/dt (slow down when obstacle approaching)
@@ -191,8 +178,7 @@ class PotentialFieldNavigator:
         base_velocity = -gradient
         vel_mag = np.linalg.norm(base_velocity)
         if vel_mag > 1e-6:
-            base_velocity = (base_velocity / vel_mag
-                             * min(vel_mag * self.velocity_gain, self.max_velocity))
+            base_velocity = (base_velocity / vel_mag * min(vel_mag * self.velocity_gain, self.max_velocity))
         else:
             base_velocity = np.zeros(3)
 
@@ -205,10 +191,7 @@ class PotentialFieldNavigator:
         #residual PPO correction, gated by threat level
         obstacles = self.field_engine.obstacles
         if len(obstacles) > 0:
-            min_obs_dist = min(
-                np.linalg.norm(current_pos - o.position) - o.radius
-                for o in obstacles
-            )
+            min_obs_dist = min(np.linalg.norm(current_pos - o.position) - o.radius for o in obstacles)
             min_obs_dist = max(min_obs_dist, 0.0)
         else:
             min_obs_dist = float('inf')
@@ -220,21 +203,20 @@ class PotentialFieldNavigator:
         if self.stuck_counter > self.stuck_threshold:
             threat_level = 1.0
 
-        #build observation and query PPO (skip when no threat to save compute)
+        #build observation and query escape agent (skip when no threat to save compute)
         if threat_level > 0.01:
-            obs = build_escape_observation(
-                agent_pos=current_pos,
-                field_engine=self.field_engine,
-                step_count=self.step_count,
-                max_episode_steps=int(self.max_simulation_time / self.dt),
-                initial_d_goal=self.initial_d_goal,
-            )
-            ppo_action, _, _, _ = self.ppo_agent.select_action(obs)
-            ppo_correction = ppo_action * self.ppo_escape_speed
+            obs = build_escape_observation(agent_pos=current_pos, field_engine=self.field_engine, step_count=self.step_count,
+                                           max_episode_steps=int(self.max_simulation_time / self.dt), initial_d_goal=self.initial_d_goal)
+            if self._dqn_agent is not None:
+                #DQN: greedy argmax -> unit direction from ACTION_MAP
+                escape_dir = self._dqn_agent.select_action_deterministic(obs)
+            else:
+                #PPO: sampled action already in (-1, 1)^3
+                escape_dir, _, _, _ = self.ppo_agent.select_action(obs)
+            ppo_correction = escape_dir * self.ppo_escape_speed
 
             #blend: base velocity when safe, PPO correction when threatened
-            final_velocity = ((1.0 - threat_level) * base_velocity
-                              + threat_level * ppo_correction)
+            final_velocity = ((1.0 - threat_level) * base_velocity + threat_level * ppo_correction)
         else:
             final_velocity = base_velocity
 
@@ -243,12 +225,8 @@ class PotentialFieldNavigator:
         new_target[2] = np.clip(new_target[2], 0.1, self.target_altitude + 1.0)
 
         #clamp to workspace bounds
-        new_target[0] = np.clip(new_target[0],
-                                self.workspace_bounds[0][0],
-                                self.workspace_bounds[0][1])
-        new_target[1] = np.clip(new_target[1],
-                                self.workspace_bounds[1][0],
-                                self.workspace_bounds[1][1])
+        new_target[0] = np.clip(new_target[0], self.workspace_bounds[0][0], self.workspace_bounds[0][1])
+        new_target[1] = np.clip(new_target[1], self.workspace_bounds[1][0], self.workspace_bounds[1][1])
 
         #debug output (every 48 steps = ~1 second at 48Hz)
         if self.debug and self.debug_counter % 48 == 0:
@@ -322,7 +300,7 @@ class PotentialFieldNavigator:
 
         while self.current_time < self.max_simulation_time:
             #advance obstacle positions (analytical, no grid solve)
-            #this is the ONLY place obstacle positions are updated in
+            #this is the only place obstacle positions are updated in
             #the deployment loop (the training env does it in env.step())
             for obs in self.field_engine.obstacles:
                 obs.update_position(self.dt)
@@ -349,12 +327,7 @@ class PotentialFieldNavigator:
 
             #use PID controller to compute motor RPMs from target position
             target_rpy = np.array([0, 0, 0])  #keep level
-            rpm, _, _ = self.ctrl.computeControlFromState(
-                control_timestep=self.dt,
-                state=state,
-                target_pos=self.target_position,
-                target_rpy=target_rpy
-            )
+            rpm, _, _ = self.ctrl.computeControlFromState(control_timestep=self.dt, state=state, target_pos=self.target_position, target_rpy=target_rpy)
 
             #apply RPM action (CtrlAviary expects 4 RPM values)
             obs, reward, terminated, truncated, info = self.env.step(rpm.reshape(1, 4))
@@ -386,8 +359,7 @@ class PotentialFieldNavigator:
                 final_dist = np.linalg.norm(self.trajectory[-1] - self.goal_pos)
                 print(f"  Final distance to goal: {final_dist:.2f}m")
 
-                distances = [np.linalg.norm(pos - self.goal_pos)
-                             for pos in self.trajectory]
+                distances = [np.linalg.norm(pos - self.goal_pos) for pos in self.trajectory]
                 if len(distances) > 10:
                     initial_dist = distances[0]
                     final_dist = distances[-1]
@@ -405,9 +377,7 @@ class PotentialFieldNavigator:
         if visualize_field and len(self.trajectory) > 0:
             self.visualize_results()
 
-        return (self.reached_goal,
-                np.array(self.trajectory) if len(self.trajectory) > 0
-                else np.array([]))
+        return (self.reached_goal, np.array(self.trajectory) if len(self.trajectory) > 0 else np.array([]))
 
     def visualize_results(self):
         """

@@ -12,7 +12,7 @@ While subharmonic fields use Gaussian repulsion:
 
 superharmonic fields use inverse-power repulsion:
     Phi_super(x) = a_att * ||x - x_g||^2  +  sum( a_rep * (d0 / ri)^n )   for ri < d0
-                                                  0                          for ri >= d0
+                                                  0                       for ri >= d0
 
 where ri = ||x - x_oi||  and  n > 1.
 
@@ -41,17 +41,16 @@ to the superharmonic regime.
 
 import numpy as np
 from typing import List, Optional, Tuple
-from engines.subharmonic_field_engine import Obstacle
+try:
+    from engines.subharmonic_field_engine import Obstacle
+except ImportError:
+    from subharmonic_field_engine import Obstacle
 
 
 class SuperharmonicFieldEngine:
     """
     Superharmonic Potential Field Engine with inverse-power repulsion
     and wall-repulsive potential.
-
-    Mirrors SubharmonicFieldEngine (analytical mode) so that
-    switching between subharmonic and superharmonic is as simple as swapping
-    the engine object.
 
     Parameters:
     - goal_position : np.ndarray - goal location [x, y, z] or [x, y]
@@ -70,12 +69,8 @@ class SuperharmonicFieldEngine:
       repulsion activates). Analogous to d0 for obstacles.
     """
 
-    def __init__(self, goal_position: np.ndarray, a_att: float = 0.1,
-                 a_rep: float = 1.0, n_power: float = 2.0,
-                 danger_distance: float = 1.0, epsilon: float = 1e-4,
-                 workspace_lo: float = -3.0, workspace_hi: float = 3.0,
-                 a_wall: float = 0.5, wall_power: float = 2.0,
-                 wall_danger: float = 0.8):
+    def __init__(self, goal_position: np.ndarray, a_att: float = 0.1, a_rep: float = 1.0, n_power: float = 2.0, danger_distance: float = 1.0, epsilon: float = 1e-4, workspace_lo: float = -3.0, workspace_hi: float = 3.0,
+                 a_wall: float = 0.5, wall_power: float = 2.0, wall_danger: float = 0.8):
         """
         Parameters:
         - goal_position : np.ndarray - goal location [x, y, z] or [x, y]
@@ -171,8 +166,7 @@ class SuperharmonicFieldEngine:
         """
         Computes the wall-repulsive potential.
 
-        Phi_wall(x) = sum_d  a_wall * (d_w / d_lo_d)^m   if d_lo_d < d_w
-                            + a_wall * (d_w / d_hi_d)^m   if d_hi_d < d_w
+        Phi_wall(x) = sum_d  a_wall * (d_w / d_lo_d)^m   if d_lo_d < d_w + a_wall * (d_w / d_hi_d)^m   if d_hi_d < d_w
 
         where d_lo_d = x_d - ws_lo_d, d_hi_d = ws_hi_d - x_d.
 
@@ -215,7 +209,7 @@ class SuperharmonicFieldEngine:
             Phi_hi = a_wall * d_w^m * (ws_hi_d - x_d)^{-m}
             dPhi_hi/dx_d = +a_wall * m * d_w^m * (ws_hi_d - x_d)^{-(m+1)}
 
-        The gradient points AWAY from each wall (repulsive), which is what
+        The gradient points away from each wall (repulsive), which is what
         we want-> -grad pushes the drone inward.
 
         Parameters:
@@ -424,10 +418,11 @@ class SuperharmonicFieldEngine:
         phi_center = self.compute_potential(pos)
 
         for d in range(len(pos)):
-            pp = pos.copy(); pp[d] += eps
-            pm = pos.copy(); pm[d] -= eps
-            laplacian += (self.compute_potential(pp) - 2.0 * phi_center +
-                          self.compute_potential(pm)) / (eps ** 2)
+            pp = pos.copy()
+            pp[d] += eps
+            pm = pos.copy()
+            pm[d] -= eps
+            laplacian += (self.compute_potential(pp) - 2.0 * phi_center + self.compute_potential(pm)) / (eps ** 2)
 
         return laplacian
 

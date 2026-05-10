@@ -1,0 +1,9 @@
+{
+  "obs_dim": 13,
+  "act_dim": 3,
+  "hidden_sizes": [
+    128,
+    128
+  ],
+  "obs_normalization_folded": true
+}

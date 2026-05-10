@@ -31,11 +31,7 @@ class HybridFieldEngine:
       transition band instead of hard switching. 0 = hard switch.
     """
 
-    def __init__(self, sub_engine: SubharmonicFieldEngine,
-                 super_engine: SuperharmonicFieldEngine,
-                 switch_threshold: float = 0.1,
-                 hysteresis: float = 0.03,
-                 blend_width: float = 0.0):
+    def __init__(self, sub_engine: SubharmonicFieldEngine, super_engine: SuperharmonicFieldEngine, switch_threshold: float = 0.1, hysteresis: float = 0.03, blend_width: float = 0.0):
         """
         Parameters:
         - sub_engine : SubharmonicFieldEngine - subharmonic engine
@@ -190,8 +186,4 @@ class HybridFieldEngine:
         """
         self.sup.obstacles.clear()
         for obs in self.sub.obstacles:
-            self.sup.add_obstacle(
-                position=obs.position.copy(),
-                radius=obs.radius,
-                velocity=obs.velocity.copy() if obs.velocity is not None else None,
-            )
+            self.sup.add_obstacle(position=obs.position.copy(), radius=obs.radius, velocity=obs.velocity.copy() if obs.velocity is not None else None)

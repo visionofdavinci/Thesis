@@ -34,9 +34,7 @@ class StuckDetector:
     - stagnation_threshold : float - min improvement to reset stagnation
     """
 
-    def __init__(self, window_size: int = 30, progress_threshold: float = 0.15,
-                 cycle_ratio: float = 5.0, stagnation_window: int = 120,
-                 stagnation_threshold: float = 0.25):
+    def __init__(self, window_size: int = 30, progress_threshold: float = 0.15, cycle_ratio: float = 5.0, stagnation_window: int = 120, stagnation_threshold: float = 0.25):
         self.window_size = window_size
         self.progress_threshold = progress_threshold
         self.cycle_ratio = cycle_ratio
@@ -77,10 +75,7 @@ class StuckDetector:
         net_progress = d_old - d_now
 
         recent_positions = self.positions[-self.window_size:]
-        path_length = sum(
-            np.linalg.norm(recent_positions[i+1] - recent_positions[i])
-            for i in range(len(recent_positions) - 1)
-        )
+        path_length = sum(np.linalg.norm(recent_positions[i+1] - recent_positions[i]) for i in range(len(recent_positions) - 1))
         net_displacement = np.linalg.norm(recent_positions[-1] - recent_positions[0])
 
         if path_length < 0.05:
@@ -117,8 +112,7 @@ class ModeController:
     - min_dwell : int - minimum steps before switching
     """
 
-    def __init__(self, high_threshold: float = 0.2, low_threshold: float = 0.05,
-                 min_dwell: int = 10):
+    def __init__(self, high_threshold: float = 0.2, low_threshold: float = 0.05, min_dwell: int = 10):
         self.high_threshold = high_threshold
         self.low_threshold = low_threshold
         self.min_dwell = min_dwell
@@ -150,17 +144,11 @@ class ModeController:
         self.switch_count = 0; self.mode_history.clear()
 
 
-# observation builder (obs_dim=12, field-only)
+# observation builder (obs_dim=13, field-only)
 
-def build_escape_observation(agent_pos: np.ndarray, field_engine,
-                              step_count: int,
-                              max_episode_steps: int = 150,
-                              initial_d_goal: float = 5.85,
-                              ws_lo: float = -3.0,
-                              ws_hi: float = 3.0,
-                              **kwargs) -> np.ndarray:
+def build_escape_observation(agent_pos: np.ndarray, field_engine, step_count: int, max_episode_steps: int = 150, initial_d_goal: float = 5.85, ws_lo: float = -3.0, ws_hi: float = 3.0, **kwargs) -> np.ndarray:
     """
-    Builds 12-dim field-only observation matching the training f().
+    Builds 13-dim field-only observation matching the training environment.
     No raw obstacle data -> the potential field is the abstraction.
 
     Parameters:
@@ -168,21 +156,22 @@ def build_escape_observation(agent_pos: np.ndarray, field_engine,
     - field_engine : engine with compute_potential/gradient/dphi_dt
     - step_count : int - current step
     - max_episode_steps : int - max steps (for time normalization)
-    - initial_d_goal : float - initial distance to goal
+    - initial_d_goal : float - kept for backward compatibility (unused)
     - ws_lo : float - workspace lower bound
     - ws_hi : float - workspace upper bound
     - **kwargs : ignored (for backward compatibility)
     Returns:
-    - obs : np.ndarray of shape (12,)
+    - obs : np.ndarray of shape (13,)
     """
-    obs = np.zeros(12, dtype=np.float64)
+    obs = np.zeros(13, dtype=np.float64)
     pos = np.asarray(agent_pos, dtype=float)
 
-    #relative goal (normalized)
+    # goal direction - normalized by current distance (not initial_d_goal)
     rel_goal = field_engine.goal_position - pos
-    obs[0:3] = rel_goal / max(initial_d_goal, 1.0)
+    d_goal_now = np.linalg.norm(rel_goal)
+    obs[0:3] = rel_goal / max(d_goal_now, 0.5)
 
-    #raw gradient — magnitude encodes urgency
+    #raw gradient - magnitude encodes urgency
     grad = field_engine.compute_gradient(pos)
     obs[3:6] = grad
 
@@ -203,5 +192,8 @@ def build_escape_observation(agent_pos: np.ndarray, field_engine,
     wall_d = np.minimum(d_lo, d_hi)
     ws_half = (ws_hi - ws_lo) / 2.0
     obs[9:12] = np.tanh(wall_d / max(ws_half * 0.3, 0.1))
+
+    # goal proximity (dim 12)
+    obs[12] = np.tanh(d_goal_now / 3.0)
 
     return obs

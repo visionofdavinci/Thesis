@@ -1,0 +1,59 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Ablation 1 (subharmonic; RQ1 smoothness, RQ2 convergence): scenario S1a vertical chimney with passing movers}
+\label{tab:abl1:S1a_vertical_chimney_with_passing_movers}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Config & $\mathrm{LDLJ}$ $\downarrow$ & $\sigma^2_v$ $\downarrow$ & $t_{\mathrm{goal}}$ $\downarrow$ & $\mathrm{SPL}$ $\uparrow$ & $L$ $\downarrow$ & $\mathrm{SR}$ $\uparrow$ & $\mathrm{CR}$ $\downarrow$ \\
+\midrule
+\textsc{Full} & 13.83\,(5.09) & 0.255\,(0.122) & 16.06\,(4.48)$_{[n=418]}$ & 0.275\,(0.337) & 16.30\,(14.46) & 0.418 & 0.336 \\
+\textsc{No-Sub} & 19.13\,(1.18) & 0.191\,(0.073) & 21.04\,(7.22)$_{[n=263]}$ & 0.113\,(0.209) & 29.89\,(16.25) & 0.263 & 0.000 \\
+\textsc{No-Super} & 13.72\,(5.03) & 0.265\,(0.138) & 15.73\,(3.85)$_{[n=408]}$ & 0.272\,(0.338) & 15.54\,(13.65) & 0.408 & 0.368 \\
+\textsc{No-Ppo} & 8.64\,(2.35) & 0.152\,(0.063) & 15.42\,(4.94)$_{[n=346]}$ & 0.253\,(0.349) & 5.78\,(2.56) & 0.346 & 0.432 \\
+\textsc{Sub-Only} & 8.61\,(2.31) & 0.152\,(0.063) & 15.43\,(4.95)$_{[n=344]}$ & 0.252\,(0.349) & 5.75\,(2.51) & 0.344 & 0.434 \\
+\textsc{Super-Only} & 19.55\,(1.03) & 0.291\,(0.079) & 19.14\,(7.42)$_{[n=112]}$ & 0.057\,(0.176) & 26.55\,(11.21) & 0.112 & 0.000 \\
+\textsc{Ppo-Only} & 5.33\,(1.15) & 0.133\,(0.069) & 3.79\,(0.20)$_{[n=693]}$ & 0.693\,(0.461) & 5.52\,(1.30) & 0.693 & 0.307 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\caption{Ablation 1 (subharmonic; RQ1 smoothness, RQ2 convergence): scenario S1b long 3d approach to high corner}
+\label{tab:abl1:S1b_long_3d_approach_to_high_corner}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Config & $\mathrm{LDLJ}$ $\downarrow$ & $\sigma^2_v$ $\downarrow$ & $t_{\mathrm{goal}}$ $\downarrow$ & $\mathrm{SPL}$ $\uparrow$ & $L$ $\downarrow$ & $\mathrm{SR}$ $\uparrow$ & $\mathrm{CR}$ $\downarrow$ \\
+\midrule
+\textsc{Full} & 6.72\,(1.01) & 0.199\,(0.084) & 8.86\,(0.46)$_{[n=752]}$ & 0.718\,(0.413) & 6.70\,(1.43) & 0.752 & 0.248 \\
+\textsc{No-Sub} & 15.89\,(0.59) & 0.306\,(0.008) & 11.89\,(1.22) & 0.690\,(0.107) & 10.60\,(1.76) & 1.000 & 0.000 \\
+\textsc{No-Super} & 6.70\,(0.95) & 0.199\,(0.084) & 8.86\,(0.46)$_{[n=752]}$ & 0.718\,(0.413) & 6.70\,(1.43) & 0.752 & 0.248 \\
+\textsc{No-Ppo} & 6.72\,(1.01) & 0.199\,(0.084) & 8.86\,(0.46)$_{[n=752]}$ & 0.718\,(0.413) & 6.70\,(1.43) & 0.752 & 0.248 \\
+\textsc{Sub-Only} & 6.70\,(0.95) & 0.199\,(0.084) & 8.86\,(0.46)$_{[n=752]}$ & 0.718\,(0.413) & 6.70\,(1.43) & 0.752 & 0.248 \\
+\textsc{Super-Only} & 18.17\,(1.61) & 0.321\,(0.017) & 16.26\,(6.69)$_{[n=451]}$ & 0.285\,(0.329) & 20.29\,(7.88) & 0.451 & 0.000 \\
+\textsc{Ppo-Only} & 6.33\,(1.83) & 0.102\,(0.058) & 4.00\,(0.20)$_{[n=671]}$ & 0.670\,(0.469) & 5.71\,(2.00) & 0.671 & 0.329 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\caption{Ablation 1 (subharmonic; RQ1 smoothness, RQ2 convergence): scenario S1c 3d slalom with tangent mover}
+\label{tab:abl1:S1c_3d_slalom_with_tangent_mover}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Config & $\mathrm{LDLJ}$ $\downarrow$ & $\sigma^2_v$ $\downarrow$ & $t_{\mathrm{goal}}$ $\downarrow$ & $\mathrm{SPL}$ $\uparrow$ & $L$ $\downarrow$ & $\mathrm{SR}$ $\uparrow$ & $\mathrm{CR}$ $\downarrow$ \\
+\midrule
+\textsc{Full} & 7.53\,(3.32) & 0.157\,(0.065) & 10.31\,(1.46)$_{[n=498]}$ & 0.437\,(0.440) & 7.99\,(6.23) & 0.498 & 0.449 \\
+\textsc{No-Sub} & 14.84\,(0.71) & 0.286\,(0.010) & 10.46\,(1.08) & 0.847\,(0.098) & 7.97\,(1.51) & 1.000 & 0.000 \\
+\textsc{No-Super} & 7.20\,(2.99) & 0.157\,(0.066) & 10.61\,(1.19)$_{[n=479]}$ & 0.416\,(0.435) & 7.89\,(6.01) & 0.479 & 0.471 \\
+\textsc{No-Ppo} & 7.12\,(2.16) & 0.161\,(0.064) & 10.55\,(2.33)$_{[n=512]}$ & 0.448\,(0.439) & 6.63\,(1.25) & 0.512 & 0.449 \\
+\textsc{Sub-Only} & 6.77\,(1.41) & 0.160\,(0.065) & 10.85\,(2.18)$_{[n=493]}$ & 0.428\,(0.435) & 6.62\,(1.23) & 0.493 & 0.471 \\
+\textsc{Super-Only} & 14.85\,(0.75) & 0.285\,(0.014) & 10.52\,(1.71)$_{[n=999]}$ & 0.845\,(0.108) & 8.12\,(3.03) & 0.999 & 0.000 \\
+\textsc{Ppo-Only} & 5.46\,(0.74) & 0.160\,(0.053) & 3.81\,(0.19)$_{[n=911]}$ & 0.911\,(0.285) & 6.07\,(0.95) & 0.911 & 0.089 \\
+\bottomrule
+\end{tabular}
+\end{table}

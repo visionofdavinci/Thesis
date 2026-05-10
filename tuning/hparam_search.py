@@ -141,25 +141,22 @@ def train_trial(config: dict, n_episodes: int = 3000, seed: int = 0) -> dict:
         for o in engine.obstacles:
             o.position += np.random.randn(3) * 0.15
 
-        obs      = env.reset(agent_pos=meta["start_pos"])
-        info     = {}
+        obs = env.reset(agent_pos=meta["start_pos"])
+        info = {}
 
         for _ in range(env.max_episode_steps):
             action, log_prob, value, pre_tanh = agent.select_action(obs)
-            next_obs, reward, done, info      = env.step(action)
+            next_obs, reward, done, info = env.step(action)
             agent.buffer.add(obs, action, pre_tanh, reward, value, log_prob, done)
-            obs          = next_obs
+            obs = next_obs
             total_steps += 1
 
-            if (total_steps % steps_per_update == 0
-                    and len(agent.buffer.observations) >= agent.batch_size):
+            if (total_steps % steps_per_update == 0 and len(agent.buffer.observations) >= agent.batch_size):
                 _, _, last_val, _ = agent.select_action(obs)
                 agent.buffer.compute_returns_and_advantages(agent, last_val)
                 if agent.buffer.returns is not None:
                     return_normaliser.update(agent.buffer.returns)
-                    agent.buffer.returns = return_normaliser.normalize(
-                        agent.buffer.returns
-                    )
+                    agent.buffer.returns = return_normaliser.normalize(agent.buffer.returns)
                 agent.update()
 
             if done:
