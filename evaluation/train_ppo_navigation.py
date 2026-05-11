@@ -529,8 +529,8 @@ class TrainingNavEnvironment:
         r_progress * (Δd_goal / d_initial)      : ~ +1 / episode total
         r_align    * cos(v, goal_dir)           : alignment bonus
         r_smooth   * ||a_t - a_{t-1}||          : action-jerk penalty (skips t=1)
-        r_clearance * quadratic well            : near-obstacle barrier
-        r_wall     * quadratic well             : near-wall barrier
+        r_clearance * quadratic well            : - near-obstacle barrier
+        r_wall     * quadratic well             : - near-wall barrier
         r_goal      on success                  : sparse terminal +
         r_collision on collision                : sparse terminal -
         r_timeout   on timeout                  : sparse terminal -
