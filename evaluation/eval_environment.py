@@ -44,7 +44,6 @@ from engines.navigation_controller import (
     build_escape_observation,
 )
 from engines.ppo_policy import PPOAgent
-from engines.dqn_policy import DQNInferenceAgent
 
 #eval-specific helpers for dropping columns into the analytical engines
 from evaluation.environment_columns import (
